@@ -12,7 +12,6 @@ import com.example.biblioteca.model.CollectionItem;
 
 import java.util.List;
 
-// Adapter para o RecyclerView da ItemsActivity (lista de itens específicos)
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
     private final List<CollectionItem> itemList;
@@ -26,18 +25,23 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Usa o layout item_list.xml
-        View view = LayoutInflater.from(context).inflate(R.layout.item_collection, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_row, parent, false);
         return new ItemViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         CollectionItem item = itemList.get(position);
-        holder.titleTextView.setText(item.getTitle());
-        holder.descriptionTextView.setText(item.getDescription());
 
-        // TODO: Adicionar lógica de clique para edição futura do item
+        String title = item.getTitle();
+        if (holder.titleTextView != null) {
+            holder.titleTextView.setText(title != null ? title : "");
+        }
+
+        String description = item.getDescription();
+        if (holder.descriptionTextView != null) {
+            holder.descriptionTextView.setText(description != null ? description : "");
+        }
     }
 
     @Override
@@ -45,14 +49,12 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         return itemList.size();
     }
 
-    // Método para atualizar os dados no RecyclerView
     public void updateList(List<CollectionItem> newList) {
         itemList.clear();
         itemList.addAll(newList);
         notifyDataSetChanged();
     }
 
-    // ViewHolder interno
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
         TextView descriptionTextView;

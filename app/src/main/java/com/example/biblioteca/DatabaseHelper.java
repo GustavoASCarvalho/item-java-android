@@ -6,12 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
 import com.example.biblioteca.model.Collection;
 import com.example.biblioteca.model.CollectionItem;
 
@@ -23,25 +17,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "CollectionsDB";
     private static final int DATABASE_VERSION = 1;
 
-    // Tabela COLLECTIONS
     public static final String TABLE_COLLECTIONS = "collections";
     public static final String COL_C_ID = "_id";
     public static final String COL_C_NAME = "name";
 
-    // Tabela ITEMS
     public static final String TABLE_ITEMS = "items";
     public static final String COL_I_ID = "_id";
     public static final String COL_I_COLLECTION_ID = "collection_id";
     public static final String COL_I_TITLE = "title";
     public static final String COL_I_DESCRIPTION = "description";
 
-    // Criação da Tabela COLLECTIONS
     private static final String CREATE_TABLE_COLLECTIONS = "CREATE TABLE " + TABLE_COLLECTIONS + "("
             + COL_C_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COL_C_NAME + " TEXT UNIQUE NOT NULL"
             + ")";
 
-    // Criação da Tabela ITEMS
     private static final String CREATE_TABLE_ITEMS = "CREATE TABLE " + TABLE_ITEMS + "("
             + COL_I_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COL_I_COLLECTION_ID + " INTEGER NOT NULL,"
@@ -56,11 +46,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Cria as tabelas
         db.execSQL(CREATE_TABLE_COLLECTIONS);
         db.execSQL(CREATE_TABLE_ITEMS);
+    }
 
-        // Insere coleções padrão para iniciar o app
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
         insertDefaultCollections(db);
     }
 
@@ -71,17 +63,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Método auxiliar para popular a tabela COLLECTIONS
     private void insertDefaultCollections(SQLiteDatabase db) {
         String[] defaultNames = {"Livros", "Filmes", "Jogos"};
         for (String name : defaultNames) {
             ContentValues values = new ContentValues();
             values.put(COL_C_NAME, name);
-            db.insert(TABLE_COLLECTIONS, null, values);
+            db.insertWithOnConflict(TABLE_COLLECTIONS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
         }
     }
-
-    // --- MÉTODOS DE DADOS PARA COLLECTIONS ---
 
     public List<Collection> getAllCollections() {
         List<Collection> collectionList = new ArrayList<>();
@@ -100,16 +89,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return collectionList;
     }
 
-    // --- MÉTODOS DE DADOS PARA ITEMS ---
-
     public long insertItem(CollectionItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_I_COLLECTION_ID, item.getCollectionId());
         values.put(COL_I_TITLE, item.getTitle());
         values.put(COL_I_DESCRIPTION, item.getDescription());
-
-        // Insere a linha, retornando o ID da nova linha
         return db.insert(TABLE_ITEMS, null, values);
     }
 

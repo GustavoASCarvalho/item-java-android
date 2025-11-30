@@ -13,7 +13,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-// Activity 2: Exibe a lista de itens dentro de uma coleção. Utiliza RecyclerView.
 public class ItemsActivity extends AppCompatActivity {
 
     private long collectionId;
@@ -26,31 +25,27 @@ public class ItemsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_items);
+        setContentView(R.layout.item_list);
 
         dbHelper = new DatabaseHelper(this);
         recyclerView = findViewById(R.id.items_recycler_view);
         FloatingActionButton fab = findViewById(R.id.fab_add_item);
         emptyTextView = findViewById(R.id.empty_items_view);
 
-        // 1. Obtém dados da Intent
         collectionId = getIntent().getLongExtra("COLLECTION_ID", -1);
         collectionName = getIntent().getStringExtra("COLLECTION_NAME");
 
         if (collectionId == -1 || collectionName == null) {
-            finish(); // Fecha se não tiver dados válidos
+            finish();
             return;
         }
 
-        // Define o título da Activity para o nome da coleção
         setTitle(collectionName);
 
-        // 2. Configura o RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ItemsAdapter(this, new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
-        // 3. Configura o FAB para abrir AddItemActivity
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(ItemsActivity.this, AddItemActivity.class);
             intent.putExtra("COLLECTION_ID", collectionId);
@@ -62,17 +57,14 @@ public class ItemsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // 4. Carrega os dados da coleção sempre que a Activity for retomada
         loadCollectionItems();
     }
 
     private void loadCollectionItems() {
         List<CollectionItem> items = dbHelper.getItemsByCollection(collectionId);
 
-        // Atualiza o Adapter com a nova lista
         adapter.updateList(items);
 
-        // Exibe mensagem se a lista estiver vazia
         if (items.isEmpty()) {
             emptyTextView.setVisibility(TextView.VISIBLE);
             recyclerView.setVisibility(RecyclerView.GONE);

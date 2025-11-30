@@ -13,7 +13,6 @@ import com.example.biblioteca.model.Collection;
 
 import java.util.List;
 
-// Adapter para o RecyclerView da MainActivity (lista de tipos de coleções)
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.CollectionViewHolder> {
 
     private final Context context;
@@ -27,7 +26,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
     @NonNull
     @Override
     public CollectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Usa o layout item_collection.xml
         View view = LayoutInflater.from(context).inflate(R.layout.item_collection, parent, false);
         return new CollectionViewHolder(view);
     }
@@ -37,7 +35,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         final Collection collection = collectionList.get(position);
         holder.nameTextView.setText(collection.getName());
 
-        // Define o clique do item para abrir ItemsActivity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ItemsActivity.class);
             intent.putExtra("COLLECTION_ID", collection.getId());
@@ -51,7 +48,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         return collectionList.size();
     }
 
-    // ViewHolder interno
     public static class CollectionViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
 

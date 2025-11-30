@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.biblioteca.model.CollectionItem;
 
-// Activity 3: Formulário para adicionar um novo item à coleção.
 public class AddItemActivity extends AppCompatActivity {
 
     private long collectionId;
@@ -25,7 +24,6 @@ public class AddItemActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        // 1. Obtém dados da Intent
         collectionId = getIntent().getLongExtra("COLLECTION_ID", -1);
         collectionName = getIntent().getStringExtra("COLLECTION_NAME");
 
@@ -35,15 +33,12 @@ public class AddItemActivity extends AppCompatActivity {
             return;
         }
 
-        // Define o título
         setTitle(getString(R.string.add_item_title_format, collectionName));
 
-        // 2. Inicializa componentes
         titleEditText = findViewById(R.id.edit_item_title);
         descriptionEditText = findViewById(R.id.edit_item_description);
         Button saveButton = findViewById(R.id.button_save_item);
 
-        // 3. Configura o clique do botão
         saveButton.setOnClickListener(v -> saveItem());
     }
 
@@ -56,15 +51,13 @@ public class AddItemActivity extends AppCompatActivity {
             return;
         }
 
-        // Cria o objeto Item
         CollectionItem newItem = new CollectionItem(0, collectionId, title, description);
 
-        // Insere no banco de dados SQLite
         long result = dbHelper.insertItem(newItem);
 
         if (result != -1) {
             Toast.makeText(this, "Item '" + title + "' salvo com sucesso!", Toast.LENGTH_LONG).show();
-            finish(); // Fecha a Activity e retorna para ItemsActivity
+            finish();
         } else {
             Toast.makeText(this, "Erro ao salvar o item.", Toast.LENGTH_LONG).show();
         }
