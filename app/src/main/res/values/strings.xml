@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gerenciador de Coleções</string>
+
+    <!-- Activity Main -->
+    <string name="main_activity_title">Minhas Coleções</string>
+    <string name="main_welcome_message">Selecione uma coleção para visualizar ou adicionar itens:</string>
+    <string name="collection_icon_description">Ícone de coleção</string>
+
+    <!-- Activity Items -->
+    <string name="empty_items_message">Nenhum item cadastrado nesta coleção. Clique no botão + para adicionar um novo item.</string>
+    <string name="add_item_fab_description">Adicionar novo item</string>
+
+    <!-- Activity Add Item -->
+    <string name="add_item_title_format">Adicionar Item a %s</string>
+    <string name="item_title_label">Título</string>
+    <string name="item_title_hint">e.g., O Senhor dos Anéis, Inception</string>
+    <string name="item_description_label">Descrição/Notas</string>
+    <string name="item_description_hint">e.g., Versão estendida, 1ª Edição, Status: Emprestado</string>
+    <string name="save_button_text">Salvar Item</string>
+</resources>
